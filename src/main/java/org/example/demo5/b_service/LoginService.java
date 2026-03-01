@@ -17,10 +17,10 @@ public class LoginService {
         return new Operator(username, password);
     }
     private void validateOperator(String username, String password){
-        if(username.isBlank() | username.isEmpty()){
+        if(username.isBlank()){
             throw new UserNameException("The username is empty");
         }
-        if(password.isEmpty() | password.isBlank()){
+        if(password.isBlank()){
             throw new PasswordException("No password has been typed in");
         }
     }

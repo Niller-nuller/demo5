@@ -10,16 +10,21 @@ import java.util.List;
 
 public class BookingRepository {
 
-    public List<Booking> getBookingList() throws SQLException {
+    public List<Booking> getRawBookingList() throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
-                SELECT c.name AS customerName, t.name AS treatmentName, t.durantion_minutes,
-                e.name AS employeeName, b.start_time
-                FROM bookings
-                LEFT JOIN customers c ON b.customer_id = c.id
-                LEFT JOIN employees e ON b.employee_id = e.id
-                LEFT JOIN treatments t ON b.treatment_id = t.id
-                ORDER BY b.start_time""";
+                SELECT
+                b.id,
+                c.name AS customerName,
+                t.name AS treatmentName,
+                t.duration AS treatmentDuration,
+                e.name AS employeeName,
+                b.start_time,
+                b.status
+                FROM bookings b
+                LEFT JOIN customers c ON b.customerId = c.id
+                LEFT JOIN employees e ON b.employeeId = e.id \s
+                LEFT JOIN treatments t ON b.treatmentId = t.id""";
 
         try(Connection conn = DbConnect.getConnection()){
             PreparedStatement ps = conn.prepareStatement(SQL);
@@ -30,20 +35,25 @@ public class BookingRepository {
             }
         }return bookings;
     }
-
     public List<Booking> getBookingListBasedOnStatus(BookingStatus status) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
-                SELECT c.name AS customerName, t.name AS treatmentName, t.durantion_minutes,
-                e.name AS employeeName, b.start_time
-                FROM bookings
-                LEFT JOIN customers c ON b.customer_id = c.id
-                LEFT JOIN employees e ON b.employee_id = e.id
-                LEFT JOIN treatments t ON b.treatment_id = t.id
-                WHERE b.stats = ?
+                 SELECT
+                b.id,
+                c.name AS customerName,
+                t.name AS treatmentName,
+                t.duration AS treatmentDuration,
+                e.name AS employeeName,
+                b.start_time,
+                b.status
+                FROM bookings b
+                LEFT JOIN customers c ON b.customerId = c.id
+                LEFT JOIN employees e ON b.employeeId = e.id \s
+                LEFT JOIN treatments t ON b.treatmentId = t.id
+                WHERE b.satus = ?
                 ORDER BY b.start_time""";
 
-        try(Connection conn = DbConnect.getConnection()){
+        try(Connection conn = DbConnect.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(SQL);
             ps.setString(1,status.toString());
             ResultSet rs = ps.executeQuery();
@@ -51,30 +61,39 @@ public class BookingRepository {
                 Booking booking = createBookingFromRS(rs);
                 bookings.add(booking);
             }
-        }return bookings;
+        }
+        return bookings;
     }
-    public List<Booking> getDefaultBookingList() throws SQLException {
+    public List<Booking> getBookingHistoryList(BookingStatus status) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
-                SELECT c.name AS customerName, t.name AS treatmentName, t.durantion_minutes,
-                e.name AS employeeName, b.start_time
-                FROM bookings
-                LEFT JOIN customers c ON b.customer_id = c.id
-                LEFT JOIN employees e ON b.employee_id = e.id
-                LEFT JOIN treatments t ON b.treatment_id = t.id
-                WHERE b.stats = ?
+                 SELECT
+                b.id,
+                c.name AS customerName,
+                t.name AS treatmentName,
+                t.duration AS treatmentDuration,
+                e.name AS employeeName,
+                b.start_time,
+                b.status
+                FROM bookings b
+                LEFT JOIN customers c ON b.customerId = c.id
+                LEFT JOIN employees e ON b.employeeId = e.id \s
+                LEFT JOIN treatments t ON b.treatmentId = t.id
+                WHERE b.satus != ?
                 ORDER BY b.start_time""";
 
-        try(Connection conn = DbConnect.getConnection()){
+        try(Connection conn = DbConnect.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(SQL);
-            ps.setString(1,.toString());
+            ps.setString(1,status.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Booking booking = createBookingFromRS(rs);
                 bookings.add(booking);
             }
-        }return bookings;
+        }
+        return bookings;
     }
+
     private Booking createBookingFromRS(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String customerName = rs.getString("customerName");
@@ -89,7 +108,7 @@ public class BookingRepository {
     public void createABooking(Customer customer, Employee employee, Treatment treatment, LocalDateTime startTime) throws SQLException {
         int duration = treatment.getDurationMinutes();
         LocalDateTime endTime = startTime.plusMinutes(duration);
-        String SQL = "INSERT INTO bookings (customer_id, Worker_id, treatment_id, start_time, end_time) VALUES (?,?,?,?)";
+        String SQL = "INSERT INTO bookings (customer_id, Worker_id, treatment_id, start_time, end_time) VALUES (?,?,?,?,?)";
         try(Connection conn = DbConnect.getConnection()){
             try(PreparedStatement ps = conn.prepareStatement(SQL);){
                 ps.setInt(1,customer.getId());

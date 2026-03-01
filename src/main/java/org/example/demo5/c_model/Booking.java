@@ -1,6 +1,9 @@
 package org.example.demo5.c_model;
 
+import org.example.demo5.b_service.BookingService;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Booking {
     private int id;
@@ -19,5 +22,29 @@ public class Booking {
         this.employeeName = employeeName;
         this.startTime = startTime;
         this.status = status;
+    }
+    public String getCustomerName(){
+        return customerName;
+    }
+    public String getTreatmentName(){
+        return treatmentName;
+    }
+    public int getTreatmentDuration(){
+        return treatmentDuration;
+    }
+    public String getToStringTreatmentDuration(){
+        return String.valueOf(treatmentDuration);
+    }
+    public String getEmployeeName(){
+        return employeeName;
+    }
+    public LocalDateTime getStartTime(){
+        return startTime;
+    }
+    public String getToStringStartTime(){
+        return startTime.format(DateTimeFormatter.ofPattern("dd/mm/yy hh/mm"));
+    }
+    public BookingStatus getStatus(){
+        return status;
     }
 }

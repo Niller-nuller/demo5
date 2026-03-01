@@ -11,20 +11,20 @@ import java.sql.SQLException;
 
 public class OperatorRepo {
 
-    public boolean authenticateOperator(Operator operator) throws SQLException {
-        String SQL = "SELECT password_hash FROM operators WHERE username = ?";
-        try(Connection conn = DbConnect.getConnection()){
-            PreparedStatement ps = conn.prepareStatement(SQL); {
-                ps.setString(1,operator.getUsername());
-                ResultSet rs = ps.executeQuery();
-
-                if(rs.next()){
-                    String comparePass = rs.getString("password_hash");
-
-                    return BCrypt.checkpw(operator.getPassword(), comparePass);
-                }
-                throw new UserNameException("The username does not exist");
-            }
-        }
-    }
+//    public boolean authenticateOperator(Operator operator) throws SQLException {
+//        String SQL = "SELECT password_hash FROM operators WHERE username = ?";
+//        try(Connection conn = DbConnect.getConnection()){
+//            PreparedStatement ps = conn.prepareStatement(SQL); {
+//                ps.setString(1,operator.getUsername());
+//                ResultSet rs = ps.executeQuery();
+//
+//                if(rs.next()){
+//                    String comparePass = rs.getString("password_hash");
+//
+//                    return BCrypt.checkpw(operator.getPassword(), comparePass);
+//                }
+//                throw new UserNameException("The username does not exist");
+//            }
+//        }
+//    }
 }
