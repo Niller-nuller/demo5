@@ -9,6 +9,7 @@ import org.example.demo5.g_Exceptions.PasswordException;
 import org.example.demo5.g_Exceptions.UserNameException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class BookingService {
@@ -19,12 +20,15 @@ public class BookingService {
         return bookingRepo.getRawBookingList();
     }
 
-    public List<Booking> handleGetPendingBookings() throws SQLException {
-        return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked);
+    public List<Booking> handleGetPendingBookings(LocalDate date) throws SQLException {
+        return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked, date);
     }
 
     public List<Booking> handleGetBookingHistory() throws SQLException {
         return bookingRepo.getBookingHistoryList(BookingStatus.Booked);
+    }
+    public void cancelBooking(Booking booking) throws SQLException {
+        bookingRepo.chancelBooking(booking);
     }
 
 }

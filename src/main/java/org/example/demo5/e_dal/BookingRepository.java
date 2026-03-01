@@ -4,6 +4,7 @@ import org.example.demo5.c_model.*;
 import org.example.demo5.d_dbconfig.DbConnect;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class BookingRepository {
             }
         }return bookings;
     }
-    public List<Booking> getBookingListBasedOnStatus(BookingStatus status) throws SQLException {
+    public List<Booking> getBookingListBasedOnStatus(BookingStatus status, LocalDate date) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
                  SELECT
@@ -50,12 +51,14 @@ public class BookingRepository {
                 LEFT JOIN customers c ON b.customerId = c.id
                 LEFT JOIN employees e ON b.employeeId = e.id \s
                 LEFT JOIN treatments t ON b.treatmentId = t.id
-                WHERE b.satus = ?
+                WHERE b.status = ?
+                AND date(start_time) = ?
                 ORDER BY b.start_time""";
 
-        try(Connection conn = DbConnect.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(SQL);
+        try(Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL)) {
+
             ps.setString(1,status.toString());
+            ps.setDate(2,java.sql.Date.valueOf(date));
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Booking booking = createBookingFromRS(rs);
@@ -82,8 +85,8 @@ public class BookingRepository {
                 WHERE b.satus != ?
                 ORDER BY b.start_time""";
 
-        try(Connection conn = DbConnect.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(SQL);
+        try(Connection conn = DbConnect.getConnection();PreparedStatement ps = conn.prepareStatement(SQL)) {
+
             ps.setString(1,status.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -119,5 +122,14 @@ public class BookingRepository {
                 ps.executeQuery();
             }
         }
+    }
+    public void chancelBooking(Booking booking) throws SQLException {
+        String SQL = "DELETE FROM bookings WHERE id = ?";
+        try(Connection conn = DbConnect.getConnection()){
+            PreparedStatement ps = conn.prepareStatement(SQL);
+            ps.setInt(1,booking.getId());
+            ps.executeQuery();
+        }
+
     }
 }

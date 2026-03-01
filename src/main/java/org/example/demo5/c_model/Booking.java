@@ -23,6 +23,7 @@ public class Booking {
         this.startTime = startTime;
         this.status = status;
     }
+    public int getId(){return id;}
     public String getCustomerName(){
         return customerName;
     }
