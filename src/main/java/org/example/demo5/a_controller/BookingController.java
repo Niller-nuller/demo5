@@ -55,7 +55,7 @@ public class BookingController {
             List<Booking> booked = service.handleGetPendingBookings(date);
             bookings.setAll(booked);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            feedbackLabel.setText("An error has occurred when trying to connect to database.");
         }
     }
     private void setBookingTableValues(){

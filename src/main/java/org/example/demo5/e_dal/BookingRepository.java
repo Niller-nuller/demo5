@@ -124,12 +124,11 @@ public class BookingRepository {
         }
     }
     public void chancelBooking(Booking booking) throws SQLException {
-        String SQL = "DELETE FROM bookings WHERE id = ?";
+        String SQL = "UPDATE bookings SET status = 'Cancelled' WHERE id = ?";
         try(Connection conn = DbConnect.getConnection()){
             PreparedStatement ps = conn.prepareStatement(SQL);
             ps.setInt(1,booking.getId());
             ps.executeQuery();
         }
-
     }
 }
