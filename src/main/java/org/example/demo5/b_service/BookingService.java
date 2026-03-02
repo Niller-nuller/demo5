@@ -18,16 +18,34 @@ public class BookingService {
     BookingRepository bookingRepo = new BookingRepository(); //Temp replace with Dependency injection.
 
     public List<Booking> handleGetPendingBookings(LocalDate date) throws SQLException {
-        return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked, date);
+        try {
+            return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked, date);
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
+        }
+        return null;
     }
     public List<Booking> handleGetCompletedBooking(LocalDate date) throws SQLException {
-        return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Completed,date);
+        try {
+            return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Completed, date);
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
+        }
+        return null;
     }
     public List<Booking> handleGetCancelledBooking(LocalDate date) throws SQLException {
-        return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Cancelled, date);
+        try {
+            return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Cancelled, date);
+        }catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
+        }
+        return null;
     }
     public void cancelBooking(Booking booking) throws SQLException {
-        bookingRepo.chancelBooking(booking);
+        try {
+            bookingRepo.chancelBooking(booking);
+        }catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
+        }
     }
-
 }

@@ -2,6 +2,7 @@ package org.example.demo5.a_controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -88,12 +89,38 @@ public class BookingHistoryController {
             canceledBookings.clear();
             completedBookings.addAll(completed);
             canceledBookings.addAll(canceled);
-        } catch (RuntimeException e1) {
-            feedbackLabel.setText("An error occurred while trying to refresh the booking history");
         } catch (SQLException e1) {
-            feedbackLabel.setText("An error occurred while trying to connect to database");
+            setFeedbackLabel("An error occurred while trying to refresh the booking history");
         }
-
+    }
+    private void onClickChangeStatus(ActionEvent event){
+        Booking selected = null;
+        try{
+        if (canceledBookingTable.getSelectionModel().getSelectedItem() != null) {
+            selected = canceledBookingTable.getSelectionModel().getSelectedItem();
+            checkTableObject(selected);
+            feedbackLabel.setText("");
+            bookingService.cancelBooking(selected);
+            setFeedbackLabel("Booking er blevet færdig gjort");
+        } else if (completedBookingTable.getSelectionModel().getSelectedItem() != null) {
+            selected = completedBookingTable.getSelectionModel().getSelectedItem();
+            checkTableObject(selected);
+            feedbackLabel.setText("");
+            bookingService.cancelBooking(selected);
+            setFeedbackLabel("Booking er blevet aflyst");
+        }
+        }catch (SQLException e){
+            setFeedbackLabel("An error occurred while trying to refresh the booking history");
+        }
+        if (selected == null) {
+            setFeedbackLabel("Vælg en booking du gerne vil ændre");
+        }
+    }
+    private void checkTableObject(Booking booking){
+        if(booking == null){
+            feedbackLabel.setText("Vælg Booking du gerne vil aflyse");
+            throw new IllegalArgumentException();
+        }
     }
     private void setupDatePickerListener(){ // AI genereaet kode.
         bookingDatePick.valueProperty().addListener((obs,oldDate, newDate) -> {
@@ -105,5 +132,8 @@ public class BookingHistoryController {
     }
     private void setTodayLabel(){
         TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yy")));
+    }
+    private void setFeedbackLabel(String text){
+        feedbackLabel.setText(text);
     }
 }
