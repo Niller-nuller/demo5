@@ -14,21 +14,21 @@ public class BookingRepository {
     public List<Booking> getBookingListBasedOnStatus(BookingStatus status, LocalDate date) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
-                 SELECT
-                b.id,
-                c.name AS customerName,
-                t.name AS treatmentName,
+                SELECT
+                b.BookingId,
+                c.Name AS customerName,
+                t.Name AS treatmentName,
                 t.duration AS treatmentDuration,
-                e.name AS employeeName,
-                b.start_time,
-                b.status
+                e.Name AS employeeName,
+                b.Start_Time,
+                b.Status
                 FROM bookings b
-                LEFT JOIN customers c ON b.customerId = c.id
-                LEFT JOIN employees e ON b.employeeId = e.id \s
-                LEFT JOIN treatments t ON b.treatmentId = t.id
-                WHERE b.status = ?
-                AND date(start_time) = ?
-                ORDER BY b.start_time""";
+                LEFT JOIN customers c ON b.CustomerId = c.id
+                LEFT JOIN employees e ON b.EmployeeId = e.id \s
+                LEFT JOIN treatments t ON b.TreatmentId = t.id
+                WHERE b.Status = ?
+                AND date(Start_Time) = ?
+                ORDER BY b.Start_Time""";
         try (Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL)) {
             ps.setString(1, status.toString());
             ps.setDate(2, java.sql.Date.valueOf(date));
@@ -43,12 +43,12 @@ public class BookingRepository {
 
     private Booking createBookingFromRS(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
-        String customerName = rs.getString("customerName");
-        String treatmentName = rs.getString("treatmentName");
-        int treatmentDuration = rs.getInt("duration_minutes");
-        String employeeName = rs.getString("employee_name");
-        LocalDateTime startTime = rs.getTimestamp("start_time").toLocalDateTime();
-        BookingStatus status = BookingStatus.valueOf(rs.getString("status"));
+        String customerName = rs.getString("CustomerName");
+        String treatmentName = rs.getString("TreatmentName");
+        int treatmentDuration = rs.getInt("Duration_minutes");
+        String employeeName = rs.getString("Employee_name");
+        LocalDateTime startTime = rs.getTimestamp("Start_Time").toLocalDateTime();
+        BookingStatus status = BookingStatus.valueOf(rs.getString("Status"));
         return new Booking(id, customerName, treatmentName, treatmentDuration, employeeName, startTime, status);
     }
 
