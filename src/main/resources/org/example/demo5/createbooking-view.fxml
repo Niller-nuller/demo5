@@ -1,12 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
 
 <AnchorPane prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo5.a_controller.CreateBookingController">
-   <children>
-      <ComboBox layoutX="117.0" layoutY="148.0" prefWidth="150.0" />
-      <ComboBox layoutX="345.0" layoutY="148.0" prefWidth="150.0" />
-   </children>
+    <children>
+        <Label fx:id="todayLabel" layoutX="50.0" layoutY="30.0" text="Opret ny booking - Idag" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="30.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+
+        <!-- Customer Info -->
+        <Label layoutX="50.0" layoutY="80.0" text="Kunde:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="80.0" />
+        <TextField fx:id="customerNameField" layoutX="150.0" layoutY="75.0" prefHeight="26.0" prefWidth="200.0" promptText="Kunde navn" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="75.0" />
+        <TextField fx:id="customerPhoneField" layoutX="380.0" layoutY="75.0" prefHeight="26.0" prefWidth="150.0" promptText="Telefon" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="75.0" />
+
+        <!-- Date/Time -->
+        <Label layoutX="50.0" layoutY="120.0" text="Dato:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="120.0" />
+        <DatePicker fx:id="bookingDatePicker" layoutX="150.0" layoutY="115.0" prefHeight="26.0" prefWidth="150.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="115.0" />
+
+        <Label layoutX="320.0" layoutY="120.0" text="Tid:" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="120.0" />
+        <ComboBox fx:id="startTimeCombo" layoutX="380.0" layoutY="115.0" prefHeight="26.0" prefWidth="120.0" promptText="Vælg tid" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="115.0" />
+
+        <!-- Employee & Treatment -->
+        <Label layoutX="50.0" layoutY="170.0" text="Medarbejder:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="170.0" />
+        <ComboBox fx:id="employeeComboBox" layoutX="150.0" layoutY="165.0" prefHeight="26.0" prefWidth="200.0" promptText="Vælg medarbejder" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="165.0" />
+
+        <Label layoutX="380.0" layoutY="170.0" text="Behandling:" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="170.0" />
+        <ComboBox fx:id="treatmentComboBox" layoutX="470.0" layoutY="165.0" prefHeight="26.0" prefWidth="200.0" promptText="Vælg behandling" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="165.0" />
+
+        <!-- Buttons -->
+        <Button fx:id="createBookingButton" layoutX="50.0" layoutY="230.0" mnemonicParsing="false" onAction="#onCreateBooking" prefHeight="40.0" prefWidth="120.0" text="Opret Booking" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="230.0" />
+        <Button fx:id="checkAvailabilityButton" layoutX="200.0" layoutY="230.0" mnemonicParsing="false" onAction="#onCheckAvailability" prefHeight="40.0" prefWidth="140.0" text="Tjek ledighed" style="-fx-background-color: #2196F3; -fx-text-fill: white;" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="230.0" />
+        <Button fx:id="backButton" layoutX="370.0" layoutY="230.0" mnemonicParsing="false" onAction="#onBackToBookings" prefHeight="40.0" prefWidth="120.0" text="Tilbage" style="-fx-background-color: #757575; -fx-text-fill: white;" AnchorPane.leftAnchor="370.0" AnchorPane.topAnchor="230.0" />
+
+        <!-- Feedback -->
+        <Label fx:id="feedbackLabel" layoutX="50.0" layoutY="300.0" prefHeight="30.0" prefWidth="600.0" text="Udfyld felterne og tjek ledighed først" style="-fx-text-fill: #2196F3;" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="300.0">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <!-- Busy times preview -->
+        <Label layoutX="50.0" layoutY="350.0" text="Medarbejderens ledige tider:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="350.0" />
+        <ListView fx:id="availabilityList" layoutX="50.0" layoutY="380.0" prefHeight="200.0" prefWidth="600.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="380.0" />
+    </children>
 </AnchorPane>
+

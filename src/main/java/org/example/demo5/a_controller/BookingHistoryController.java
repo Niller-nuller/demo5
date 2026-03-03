@@ -102,13 +102,13 @@ public class BookingHistoryController {
             selected = canceledBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
             feedbackLabel.setText("");
-            bookingService.cancelBooking(selected);
+            bookingService.handleCancelBooking(selected);
             setFeedbackLabel("Booking er blevet færdig gjort");
         } else if (completedBookingTable.getSelectionModel().getSelectedItem() != null) {
             selected = completedBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
             feedbackLabel.setText("");
-            bookingService.changeBookingStatusToCompleted(selected);
+            bookingService.handleChangeBookingStatusToCompleted(selected);
             setFeedbackLabel("Booking er blevet aflyst");
         }
         }catch (SQLException e){

@@ -1,16 +1,14 @@
 package org.example.demo5.a_controller;
 
 
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
-import org.example.demo5.c_model.BookingStatus;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -45,8 +43,9 @@ public class BookingController {
         service = new BookingService();
         bookingDatePick.setValue(LocalDate.now());
         setupDatePickerListener();
-        refreshTable(LocalDate.now());
         setBookingTableValues();
+        bookingTable.setItems(bookings);
+        refreshTable(LocalDate.now());
         setTodayLabel();
     }
     @FXML
@@ -55,8 +54,9 @@ public class BookingController {
             Booking selected = bookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
             feedbackLabel.setText("");
-            service.cancelBooking(selected);
+            service.handleCancelBooking(selected);
             feedbackLabel.setText("Booking er blevet aflyst");
+            refreshTable(bookingDatePick.getValue());
         } catch (SQLException e){
             setFeedbackLabel("An error has occurred when trying to connect to the server");
         }
@@ -67,25 +67,40 @@ public class BookingController {
     public void onClickSwitchToBookingHistory(ActionEvent event){}
     @FXML
     public void onClickRefresh(ActionEvent event){
-        refreshTable(LocalDate.now());
+        refreshTable(bookingDatePick.getValue());
     }
-    private void refreshTable(LocalDate date){
-        try{
+
+    private void refreshTable(LocalDate date) {
+        bookings.clear();
+        try {
             List<Booking> booked = service.handleGetPendingBookings(date);
-            bookings.setAll(booked);
-        } catch (SQLException e) {
-            feedbackLabel.setText("An error has occurred when trying to connect to server");
+            bookings.clear();  // Prevents NPE
+            if (booked != null) {
+                bookings.addAll(booked);  // Safer than setAll()
+                feedbackLabel.setText(booked.isEmpty() ? "Ingen bookinger" : booked.size() + " fundet");
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            bookings.clear();
+            feedbackLabel.setText("Fejl: " + e.getMessage());
         }
     }
-    private void setBookingTableValues(){
-        customerNameC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getCustomerName()));
-        treatmentNameC.setCellValueFactory(cell ->new javafx.beans.property.SimpleStringProperty(cell.getValue().getTreatmentName()));
-        treatmentDurationC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getToStringTreatmentDuration()));
-        employeeNameC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmployeeName()));
-        dueDateC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getToStringStartTime()));
+    private void setBookingTableValues() {
+        customerNameC.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getCustomerName()));
+
+        treatmentNameC.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getTreatmentName()));
+
+        treatmentDurationC.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getToStringTreatmentDuration()));
+
+        employeeNameC.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getEmployeeName()));
+
+        dueDateC.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getToStringStartTime()));
     }
+
     private void setupDatePickerListener(){ // AI genereaet kode.
         bookingDatePick.valueProperty().addListener((obs,oldDate, newDate) -> {
             if (newDate != null)
