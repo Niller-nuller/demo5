@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.demo5.a_controller.BookingHistoryController"
-            prefHeight="800.0" prefWidth="1100.0">
-
+<AnchorPane prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo5.a_controller.BookingHistoryController">
+   <children>
+      <TableView fx:id="completedBookingTable" layoutX="24.0" layoutY="110.0" prefHeight="250.0" prefWidth="693.0">
+         <columns>
+            <TableColumn fx:id="completedCustomerNameC" prefWidth="116.0" text="Customer name" />
+            <TableColumn fx:id="completedTreatmentNameC" prefWidth="96.0" text="Treatment" />
+            <TableColumn fx:id="completedTreatmentDurationC" prefWidth="134.0" text="Treatment Duration" />
+            <TableColumn fx:id="completedEmployeeNameC" prefWidth="168.0" text="Employee" />
+            <TableColumn fx:id="completedDueDateC" prefWidth="178.0" text="Due" />
+         </columns>
+      </TableView>
+      <TableView fx:id="canceledBookingTable" layoutX="24.0" layoutY="436.0" prefHeight="250.0" prefWidth="693.0">
+         <columns>
+            <TableColumn fx:id="canceledCustomerNameC" prefWidth="116.0" text="Customer name" />
+            <TableColumn fx:id="canceledTreatmentNameC" prefWidth="96.0" text="Treatment" />
+            <TableColumn fx:id="canceledTreatmentDurationC" prefWidth="134.0" text="Treatment Duration" />
+            <TableColumn fx:id="canceledEmployeeNameC" prefWidth="168.0" text="Employee" />
+            <TableColumn fx:id="canceledDueDateC" prefWidth="178.0" text="Due" />
+         </columns>
+      </TableView>
+      <Label fx:id="TodayLabel" layoutX="478.0" layoutY="45.0" text="Bookning for Idag">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="735.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClickChangeStatus" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Aflys" />
+      <Button layoutX="735.0" layoutY="436.0" mnemonicParsing="false" onAction="#onClickChangeStatus" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Færdig Gjort" />
+      <DatePicker fx:id="bookingDatePick" layoutX="717.0" layoutY="72.0" />
+      <Button layoutX="665.0" layoutY="72.0" mnemonicParsing="false" onAction="#onClickRefresh" prefHeight="27.0" prefWidth="37.0" text="🗘" />
+      <Label fx:id="feedbackLabel" layoutX="249.0" layoutY="383.0" prefHeight="35.0" prefWidth="229.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
 </AnchorPane>

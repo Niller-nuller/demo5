@@ -49,13 +49,32 @@ public class BookingController {
         setBookingTableValues();
         setTodayLabel();
     }
-
+    @FXML
+    private void onCancelButtonClick(ActionEvent event){
+        try{
+            Booking selected = bookingTable.getSelectionModel().getSelectedItem();
+            checkTableObject(selected);
+            feedbackLabel.setText("");
+            service.cancelBooking(selected);
+            feedbackLabel.setText("Booking er blevet aflyst");
+        } catch (SQLException e){
+            setFeedbackLabel("An error has occurred when trying to connect to the server");
+        }
+    }
+    @FXML
+    public void onClickSwitchToCreateNewBooking(ActionEvent event){}
+    @FXML
+    public void onClickSwitchToBookingHistory(ActionEvent event){}
+    @FXML
+    public void onClickRefresh(ActionEvent event){
+        refreshTable(LocalDate.now());
+    }
     private void refreshTable(LocalDate date){
         try{
             List<Booking> booked = service.handleGetPendingBookings(date);
             bookings.setAll(booked);
         } catch (SQLException e) {
-            feedbackLabel.setText("An error has occured");
+            feedbackLabel.setText("An error has occurred when trying to connect to server");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -67,24 +86,6 @@ public class BookingController {
         employeeNameC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmployeeName()));
         dueDateC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getToStringStartTime()));
     }
-    private void onCancelButtonClick(ActionEvent event){
-        try{
-            Booking selected = bookingTable.getSelectionModel().getSelectedItem();
-            checkTableObject(selected);
-            feedbackLabel.setText("");
-            service.cancelBooking(selected);
-            feedbackLabel.setText("Booking er blevet aflyst");
-        } catch (SQLException e){
-            setFeedbackLabel("An error has occurred when trying to connect to the server");
-        }
-
-    }
-    private void checkTableObject(Booking booking){
-        if(booking == null){
-            feedbackLabel.setText("Vælg Booking du gerne vil aflyse");
-            throw new IllegalArgumentException();
-        }
-    }
     private void setupDatePickerListener(){ // AI genereaet kode.
         bookingDatePick.valueProperty().addListener((obs,oldDate, newDate) -> {
             if (newDate != null)
@@ -92,6 +93,12 @@ public class BookingController {
                 refreshTable(newDate);
             }
         });
+    }
+    private void checkTableObject(Booking booking){
+        if(booking == null){
+            feedbackLabel.setText("Vælg Booking du gerne vil aflyse");
+            throw new IllegalArgumentException();
+        }
     }
     private void setTodayLabel(){
         TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy hh/mm")));

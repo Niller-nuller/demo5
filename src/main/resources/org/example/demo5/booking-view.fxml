@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo5.a_controller.BookingController">
    <children>
-      <TableView fx:id="todayBookings" layoutX="14.0" layoutY="100.0" prefHeight="250.0" prefWidth="693.0">
+      <TableView fx:id="bookingTable" layoutX="14.0" layoutY="100.0" prefHeight="250.0" prefWidth="693.0">
         <columns>
             <TableColumn fx:id="customerNameC" prefWidth="116.0" text="Customer name" />
           <TableColumn fx:id="treatmentNameC" prefWidth="96.0" text="Treatment" />
@@ -19,18 +19,19 @@
             <TableColumn fx:id="dueDateC" prefWidth="178.0" text="Due" />
         </columns>
       </TableView>
-      <Label fx:id="TodayLabel" layoutX="309.0" layoutY="27.0" text="Bookning for Idag">
+      <Label fx:id="TodayLabel" layoutX="478.0" layoutY="27.0" text="Bookning for Idag">
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button layoutX="718.0" layoutY="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="160.0" text="Book en ny tid" />
-      <Button layoutX="718.0" layoutY="195.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="160.0" text="Vis game bookinger" />
-      <Button layoutX="718.0" layoutY="290.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="160.0" text="Button" />
-      <Label fx:id="feedbackLabel" layoutX="359.0" layoutY="432.0">
+      <Button layoutX="718.0" layoutY="100.0" mnemonicParsing="false" onAction="#onClickSwitchToCreateNewBooking" prefHeight="60.0" prefWidth="160.0" text="Book en ny tid" />
+      <Button layoutX="718.0" layoutY="195.0" mnemonicParsing="false" onAction="#onClickSwitchToBookingHistory" prefHeight="60.0" prefWidth="160.0" text="Vis gamle bookinger" />
+      <Button layoutX="718.0" layoutY="290.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="60.0" prefWidth="160.0" text="Aflys Booking" />
+      <Label fx:id="feedbackLabel" layoutX="202.0" layoutY="432.0" prefHeight="35.0" prefWidth="331.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <DatePicker fx:id="bookingDatePick" layoutX="711.0" layoutY="54.0" />
+      <Button layoutX="649.0" layoutY="54.0" mnemonicParsing="false" onAction="#onClickRefresh" prefHeight="0.0" prefWidth="37.0" text="🗘" />
    </children>
 </AnchorPane>

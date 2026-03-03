@@ -53,6 +53,7 @@ public class BookingHistoryController {
     private final ObservableList<Booking> canceledBookings = FXCollections.observableArrayList();
     private final ObservableList<Booking> completedBookings = FXCollections.observableArrayList();
     private BookingService bookingService;
+
     @FXML
     public void initialize(){
         bookingService = new BookingService();
@@ -93,6 +94,7 @@ public class BookingHistoryController {
             setFeedbackLabel("An error occurred while trying to refresh the booking history");
         }
     }
+    @FXML
     private void onClickChangeStatus(ActionEvent event){
         Booking selected = null;
         try{
@@ -106,7 +108,7 @@ public class BookingHistoryController {
             selected = completedBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
             feedbackLabel.setText("");
-            bookingService.cancelBooking(selected);
+            bookingService.changeBookingStatusToCompleted(selected);
             setFeedbackLabel("Booking er blevet aflyst");
         }
         }catch (SQLException e){
@@ -115,6 +117,10 @@ public class BookingHistoryController {
         if (selected == null) {
             setFeedbackLabel("Vælg en booking du gerne vil ændre");
         }
+    }
+    @FXML
+    public void onClickRefresh(ActionEvent event){
+        refreshTable(LocalDate.now());
     }
     private void checkTableObject(Booking booking){
         if(booking == null){

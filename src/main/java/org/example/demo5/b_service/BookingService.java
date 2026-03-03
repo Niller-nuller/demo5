@@ -48,4 +48,11 @@ public class BookingService {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
         }
     }
+    public void changeBookingStatusToCompleted(Booking booking) throws SQLException{
+        try{
+            bookingRepo.changeBookingToCompleted(booking);
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
+        }
+    }
 }
