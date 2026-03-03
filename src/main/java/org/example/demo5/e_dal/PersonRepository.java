@@ -38,9 +38,10 @@ public class PersonRepository {
             ps.setString(1, name);
             ps.setString(2, phoneNumber);
             int rowsAffected = ps.executeUpdate();
-            if(rowsAffected > 0){
-
+            if(rowsAffected == 0){
+                return createCustomer(name, phoneNumber, email);
             }
+            Customer customer =
         }
     }
     public Customer createCustomer(String name, String phoneNumber, String email) throws SQLException {
@@ -53,4 +54,5 @@ public class PersonRepository {
 
         }
     }
+    public Customer createCustomerFromRS
 }

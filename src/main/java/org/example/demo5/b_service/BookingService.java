@@ -57,8 +57,9 @@ public class BookingService {
             throw new RuntimeException("Could connect to database.");
         }
     }
-    public void handleCreateABooking(String customerName,String customerPhoneNumber,String ustomerEmail, Employee employee, Treatment treatment, LocalDateTime dateTime,) throws SQLException{
+    public void handleCreateABooking(String customerName,String customerPhoneNumber,String customerEmail, Employee employee, Treatment treatment, LocalDateTime dateTime){
         try{
+            Customer customer = personRepo.getCustomer(customerName,customerPhoneNumber,customerEmail);
             bookingRepo.createABooking(customer, employee, treatment, dateTime);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());

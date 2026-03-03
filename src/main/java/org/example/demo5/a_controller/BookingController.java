@@ -17,25 +17,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BookingController {
+
     private BookingService service;
-    @FXML
-    private TableView<Booking> bookingTable;
-    @FXML
-    private TableColumn<Booking, String> customerNameC;
-    @FXML
-    private TableColumn<Booking, String> treatmentNameC;
-    @FXML
-    private TableColumn<Booking, String> treatmentDurationC;
-    @FXML
-    private TableColumn<Booking, String> employeeNameC;
-    @FXML
-    private TableColumn<Booking, String> dueDateC;
-    @FXML
-    private Label TodayLabel;
-    @FXML
-    private Label feedbackLabel;
-    @FXML
-    private DatePicker bookingDatePick;
+
+    @FXML private TableView<Booking> bookingTable;
+    @FXML private TableColumn<Booking, String> customerNameC;
+    @FXML private TableColumn<Booking, String> treatmentNameC;
+    @FXML private TableColumn<Booking, String> treatmentDurationC;
+    @FXML private TableColumn<Booking, String> employeeNameC;
+    @FXML private TableColumn<Booking, String> dueDateC;
+    @FXML private Label TodayLabel;
+    @FXML private Label feedbackLabel;
+    @FXML private DatePicker bookingDatePick;
+
     private final ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
     @FXML
@@ -57,7 +51,7 @@ public class BookingController {
             service.handleCancelBooking(selected);
             feedbackLabel.setText("Booking er blevet aflyst");
             refreshTable(bookingDatePick.getValue());
-        } catch (SQLException e){
+        } catch (RuntimeException e){
             setFeedbackLabel("An error has occurred when trying to connect to the server");
         }
     }
@@ -79,9 +73,9 @@ public class BookingController {
                 bookings.addAll(booked);  // Safer than setAll()
                 feedbackLabel.setText(booked.isEmpty() ? "Ingen bookinger" : booked.size() + " fundet");
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             bookings.clear();
-            feedbackLabel.setText("Fejl: " + e.getMessage());
+            feedbackLabel.setText("Fejl: Kunne ikke skabe forbindelse til database");
         }
     }
     private void setBookingTableValues() {
