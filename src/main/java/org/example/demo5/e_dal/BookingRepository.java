@@ -63,7 +63,7 @@ public class BookingRepository {
                 ps.setInt(3, treatment.getTreatmentId());
                 ps.setTimestamp(4, Timestamp.valueOf(startTime));
                 ps.setTimestamp(5, Timestamp.valueOf(endTime));
-                ps.executeUpdate();  // Fixed: was executeQuery()
+                ps.executeUpdate();
             }
         }
     }
