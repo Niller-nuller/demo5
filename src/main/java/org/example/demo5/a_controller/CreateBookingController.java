@@ -34,11 +34,12 @@ public class CreateBookingController {
     @FXML private ListView<String> availabilityList;
     @FXML private Label feedbackLabel;
     @FXML private Button createBookingButton;
+    @FXML private Button backButton;
 
-    @FXML
-    public void initialize(BookingService bookingService, SceneSwitcher sceneSwitcher) {
-        this.sceneSwitcher = sceneSwitcher;
+
+    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher) {
         this.bookingService = bookingService;
+        this.sceneSwitcher = sceneSwitcher;
         bookingDatePicker.setValue(LocalDate.now());
         loadEmployees();
         loadTreatments();
@@ -118,6 +119,7 @@ public class CreateBookingController {
         try {
             employees.clear();
             employees.addAll(bookingService.handleGetAllEmployees());
+            employeeComboBox.setItems(employees);
         } catch (RuntimeException e) {
             setFeedbackLabel("Fejl ved indlæsning af medarbejdere");
         }
@@ -126,6 +128,7 @@ public class CreateBookingController {
         try {
             treatments.clear();
             treatments.addAll(bookingService.handleGetAllTreatments());
+            treatmentComboBox.setItems(treatments);
         } catch (Exception e) {
             setFeedbackLabel("Fejl ved indlæsning af behandlinger");
         }

@@ -10,6 +10,9 @@ public class DbConnect {
     public static Connection getConnection() {
         Properties prop = new Properties();
         try (FileInputStream inputStream = new FileInputStream(".env")) {
+            if(inputStream == null){
+                throw new RuntimeException("Could not find .env");
+            }
             prop.load(inputStream);
         } catch (Exception e) {
             System.out.println("failed to load .env file: ");

@@ -35,13 +35,12 @@ public class SceneSwitcher {
 
             Object controller = loader.getController();
             if (controller instanceof BookingController bc) {
-                bc.initialize(bookingService, this);
+                bc.setup(bookingService, this);
             } else if (controller instanceof BookingHistoryController bhc) {
-                bhc.initialize(bookingService, this);
+                bhc.setup(bookingService, this);
             } else if (controller instanceof CreateBookingController cbc) {
-                cbc.initialize(bookingService, this);
+                cbc.setup(bookingService, this);
             }
-
             Stage stage = (Stage) source.getScene().getWindow();
             stage.setScene(scene);
             stage.show();

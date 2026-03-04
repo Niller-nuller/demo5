@@ -14,7 +14,6 @@ import org.example.demo5.e_dal.TreatmentRepository;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    @Override
     public void start(Stage stage) throws IOException {
         BookingService bookingService = new BookingService(
                 new BookingRepository(),
@@ -25,7 +24,7 @@ public class HelloApplication extends Application {
         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("booking-view.fxml"));
         Scene scene = new Scene(loader.load(), 800, 1100);
         BookingController controller = loader.getController();
-        controller.initialize(bookingService,sceneSwitcher);
+        controller.setup(bookingService,sceneSwitcher);
         stage.setScene(scene);
         stage.show();
     }

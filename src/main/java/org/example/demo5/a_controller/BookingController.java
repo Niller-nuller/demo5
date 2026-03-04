@@ -32,8 +32,8 @@ public class BookingController {
 
     private final ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
-    @FXML
-    public void initialize(BookingService bookingService, SceneSwitcher sceneSwitcher){
+
+    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher){
         this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
@@ -59,6 +59,7 @@ public class BookingController {
     @FXML
     public void onClickSwitchToCreateNewBooking(ActionEvent event){
         sceneSwitcher.switchToCreateBookingView((Node) event.getSource());
+        System.out.println("Switch button clicked");
     }
     @FXML
     public void onClickSwitchToBookingHistory(ActionEvent event){
@@ -115,7 +116,7 @@ public class BookingController {
         }
     }
     private void setTodayLabel(){
-        TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy hh/mm")));
+        TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm")));
     }
     public void setFeedbackLabel(String text){
         feedbackLabel.setText(text);

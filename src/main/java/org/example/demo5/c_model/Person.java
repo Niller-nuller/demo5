@@ -22,4 +22,8 @@ public class Person {
     public String getName(){return name;}
     public String getEmail(){return email;}
     public String getPhoneNumber(){return phoneNumber;}
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -18,4 +18,9 @@ public class Treatment {
     public int getDurationMinutes(){
         return durationMinutes;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

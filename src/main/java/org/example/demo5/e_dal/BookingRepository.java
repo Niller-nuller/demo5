@@ -48,7 +48,7 @@ public class BookingRepository {
     public void createABooking(Customer customer, Employee employee, Treatment treatment, LocalDateTime startTime) throws SQLException {
         int duration = treatment.getDurationMinutes();
         LocalDateTime endTime = startTime.plusMinutes(duration);
-        String SQL = "INSERT INTO booking (CustomerId, EmployeeId, TreatmentId, StartTime, EndTime) VALUES (?,?,?,?,?)";
+        String SQL = "INSERT INTO booking (CustomerId, EmployeeId, TreatmentId, StartTime, EndTime, Status) VALUES (?,?,?,?,?,?)";
         try (Connection conn = DbConnect.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(SQL)) {
                 ps.setInt(1, customer.getId());
@@ -56,6 +56,7 @@ public class BookingRepository {
                 ps.setInt(3, treatment.getTreatmentId());
                 ps.setTimestamp(4, Timestamp.valueOf(startTime));
                 ps.setTimestamp(5, Timestamp.valueOf(endTime));
+                ps.setString(6, String.valueOf(BookingStatus.Booked));
                 ps.executeUpdate();
             }
         }

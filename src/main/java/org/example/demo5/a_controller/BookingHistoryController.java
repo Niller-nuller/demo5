@@ -55,8 +55,8 @@ public class BookingHistoryController {
     private SceneSwitcher sceneSwitcher;
     private BookingService bookingService;
 
-    @FXML
-    public void initialize(BookingService bookingService, SceneSwitcher sceneSwitcher){
+
+    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher){
         this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
