@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dbHair@localhost" uuid="565f9aaa-eeba-4ba3-96a6-30a7c9d0c0e5">
+    <data-source source="LOCAL" name="dbHair@localhost" uuid="33ac391a-980c-4bbf-af35-6403fcde5120">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

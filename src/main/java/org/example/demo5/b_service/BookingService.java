@@ -13,10 +13,15 @@ import java.util.List;
 
 public class BookingService {
 
-    BookingRepository bookingRepo = new BookingRepository(); //Temp replace with Dependency injection.
+    private final BookingRepository bookingRepo; //Temp replace with Dependency injection.
     PersonRepository personRepo = new PersonRepository();
     TreatmentRepository treatmentRepo = new TreatmentRepository();
 
+    public BookingService(BookingRepository bookingRepo,PersonRepository personRepo, TreatmentRepository treatmentRepo){
+        this.bookingRepo = bookingRepo;
+        this.personRepo = personRepo;
+        this.treatmentRepo = treatmentRepo;
+    }
     public List<Booking> handleGetPendingBookings(LocalDate date){
         try {
             return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked, date);
@@ -59,7 +64,8 @@ public class BookingService {
     }
     public void handleCreateABooking(String customerName,String customerPhoneNumber,String customerEmail, Employee employee, Treatment treatment, LocalDateTime dateTime){
         try{
-            Customer customer = personRepo.getCustomer(customerName,customerPhoneNumber,customerEmail);
+            Customer customer = new Customer(customerName,customerEmail,customerPhoneNumber);
+            customer = personRepo.getCustomer(customer);
             bookingRepo.createABooking(customer, employee, treatment, dateTime);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());

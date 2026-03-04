@@ -32,27 +32,41 @@ public class PersonRepository {
         String phoneNumber = rs.getString("PhoneNumber");
         return new Employee(employeeId, name, email, phoneNumber);
     }
-    public Customer getCustomer(String name, String phoneNumber, String email) throws SQLException {
-        String SQL = "SELECT * FROM customer WHERE name = ? AND phoneNumber = ?";
+
+    public Customer getCustomer(Customer customer) throws SQLException {
+        String SQL = "SELECT CustomerId, Name, Email, PhoneNumber FROM customer WHERE name = ? AND phoneNumber = ?";
         try(Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL)){
-            ps.setString(1, name);
-            ps.setString(2, phoneNumber);
-            int rowsAffected = ps.executeUpdate();
-            if(rowsAffected == 0){
-                return createCustomer(name, phoneNumber, email);
-            }
-            Customer customer =
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getPhoneNumber());
+            try(ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    return createCustomerFromRS(rs);
+                }
+            } return createCustomerIfNotInSQL(customer);
         }
     }
-    public Customer createCustomer(String name, String phoneNumber, String email) throws SQLException {
-        String SQL = "INSERT INTO customer VALUES (?, ?, ?)";
-        try(Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL)){
-            ps.setString(1, name);
-            ps.setString(2, phoneNumber);
-            ps.setString(3, email);
-
-
+    public Customer createCustomerIfNotInSQL(Customer customer) throws SQLException {
+        String SQL = "INSERT INTO Customer (Name, Email, PhoneNumber) VALUES (?, ?, ?)";
+        try(Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL, PreparedStatement.RETURN_GENERATED_KEYS)){
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getEmail());
+            ps.setString(3, customer.getPhoneNumber());
+            ps.executeUpdate();
+            try(ResultSet keys = ps.getGeneratedKeys()){
+                if(keys.next()){
+                    customer.setId(keys.getInt(1));
+                }
+                else {
+                    throw new SQLException("Failed to create Customer, no Id could be obtained");
+                }
+            }return customer;
         }
     }
-    public Customer createCustomerFromRS
+    private Customer createCustomerFromRS(ResultSet rs) throws SQLException {
+        int id = rs.getInt("CustomerId");
+        String customerName = rs.getString("Name");
+        String customerEmail = rs.getString("Email");
+        String customerPhoneNumber = rs.getString("PhoneNumber");
+        return new Customer(id, customerName, customerEmail, customerPhoneNumber);
+    }
 }

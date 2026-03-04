@@ -5,10 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.demo5.b_service.BookingService;
-import org.example.demo5.c_model.Customer;
 import org.example.demo5.c_model.Employee;
 import org.example.demo5.c_model.Treatment;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CreateBookingController {
-    private final BookingService service = new BookingService();
+    private BookingService bookingService;
     private final ObservableList<Employee> employees = FXCollections.observableArrayList();
     private final ObservableList<Treatment> treatments = FXCollections.observableArrayList();
 
@@ -32,7 +30,8 @@ public class CreateBookingController {
     @FXML private Button createBookingButton;
 
     @FXML
-    public void initialize() {
+    public void initialize(BookingService bookingService) {
+        this.bookingService = bookingService;
         bookingDatePicker.setValue(LocalDate.now());
         loadEmployees();
         loadTreatments();
@@ -47,19 +46,19 @@ public class CreateBookingController {
         LocalDate date = bookingDatePicker.getValue();
 
         if (selectedEmployee == null || selectedTreatment == null || date == null) {
-            feedbackLabel.setText("Vælg medarbejder, behandling og dato først");
+            setFeedbackLabel("Vælg medarbejder, behandling og dato først");
             return;
         }
 
         try {
-            List<LocalTime> availableTimes = service.handleGetAvailableTimes(selectedEmployee, date, selectedTreatment);
+            List<LocalTime> availableTimes = bookingService.handleGetAvailableTimes(selectedEmployee, date, selectedTreatment);
             startTimeCombo.setItems(FXCollections.observableArrayList(availableTimes));
 
             if (availableTimes.isEmpty()) {
-                feedbackLabel.setText("Ingen ledige tider for " + selectedEmployee.getName());
+                setFeedbackLabel("Ingen ledige tider for " + selectedEmployee.getName());
                 createBookingButton.setDisable(true);
             } else {
-                feedbackLabel.setText(availableTimes.size() + " ledige tider fundet");
+                setFeedbackLabel(availableTimes.size() + " ledige tider fundet");
                 createBookingButton.setDisable(false);
                 availabilityList.getItems().clear();
                 availabilityList.getItems().addAll(
@@ -69,7 +68,7 @@ public class CreateBookingController {
                 );
             }
         } catch (Exception e) {
-            feedbackLabel.setText("Fejl: " + e.getMessage());
+            setFeedbackLabel("Fejl: " + e.getMessage());
         }
     }
 
@@ -86,25 +85,22 @@ public class CreateBookingController {
 
             if (customerName.isEmpty() || customerPhone.isEmpty() || customerEmail.isEmpty() || employee == null ||
                     treatment == null || date == null || startTime == null) {
-                feedbackLabel.setText("Udfyld alle felter");
+                setFeedbackLabel("Udfyld alle felter");
                 return;
             }
             LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-            service.handleCreateABooking(customerName,customerPhone,customerEmail,employee,treatment,startDateTime);
+            bookingService.handleCreateABooking(customerName,customerPhone,customerEmail,employee,treatment,startDateTime);
 
-            feedbackLabel.setText("Booking oprettet for " + customerName + " kl. " + startTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+            setFeedbackLabel("Booking oprettet for " + customerName + " kl. " + startTime.format(DateTimeFormatter.ofPattern("HH:mm")));
             clearForm();
 
-        } catch (Exception e) {
-            feedbackLabel.setText("Fejl ved oprettelse: " + e.getMessage());
+        } catch (RuntimeException e) {
+            setFeedbackLabel("Fejl ved oprettelse: Kunne ikke oprette forbindelse til database");
         }
     }
     @FXML
     private void onBackToBookings() {
         // Switch to booking view (implement navigation)
-    }
-    private void setFeedbackLabel(String text){
-        feedbackLabel.setText(text);
     }
     private void setupDateListener() {
         bookingDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
@@ -117,17 +113,17 @@ public class CreateBookingController {
     private void loadEmployees() {
         try {
             employees.clear();
-            employees.addAll(service.handleGetAllEmployees());
+            employees.addAll(bookingService.handleGetAllEmployees());
         } catch (RuntimeException e) {
-            feedbackLabel.setText("Fejl ved indlæsning af medarbejdere");
+            setFeedbackLabel("Fejl ved indlæsning af medarbejdere");
         }
     }
     private void loadTreatments() {
         try {
             treatments.clear();
-            treatments.addAll(service.handleGetAllTreatments());
+            treatments.addAll(bookingService.handleGetAllTreatments());
         } catch (Exception e) {
-            feedbackLabel.setText("Fejl ved indlæsning af behandlinger");
+            setFeedbackLabel("Fejl ved indlæsning af behandlinger");
         }
     }
     private void clearForm() {
@@ -135,6 +131,9 @@ public class CreateBookingController {
         customerPhoneField.clear();
         startTimeCombo.getItems().clear();
         availabilityList.getItems().clear();
-        feedbackLabel.setText("Booking oprettet!");
+        setFeedbackLabel("Booking oprettet!");
+    }
+    private void setFeedbackLabel(String text){
+        feedbackLabel.setText(text);
     }
 }

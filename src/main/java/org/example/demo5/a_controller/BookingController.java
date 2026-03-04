@@ -9,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +16,7 @@ import java.util.List;
 
 public class BookingController {
 
-    private BookingService service;
+    private BookingService bookingService;
 
     @FXML private TableView<Booking> bookingTable;
     @FXML private TableColumn<Booking, String> customerNameC;
@@ -33,8 +31,8 @@ public class BookingController {
     private final ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize(){
-        service = new BookingService();
+    public void initialize(BookingService bookingService){
+        this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
         setupDatePickerListener();
         setBookingTableValues();
@@ -47,9 +45,9 @@ public class BookingController {
         try{
             Booking selected = bookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
-            feedbackLabel.setText("");
-            service.handleCancelBooking(selected);
-            feedbackLabel.setText("Booking er blevet aflyst");
+            setFeedbackLabel("");
+            bookingService.handleCancelBooking(selected);
+            setFeedbackLabel("Booking er blevet aflyst");
             refreshTable(bookingDatePick.getValue());
         } catch (RuntimeException e){
             setFeedbackLabel("An error has occurred when trying to connect to the server");
@@ -67,15 +65,15 @@ public class BookingController {
     private void refreshTable(LocalDate date) {
         bookings.clear();
         try {
-            List<Booking> booked = service.handleGetPendingBookings(date);
+            List<Booking> booked = bookingService.handleGetPendingBookings(date);
             bookings.clear();  // Prevents NPE
             if (booked != null) {
                 bookings.addAll(booked);  // Safer than setAll()
-                feedbackLabel.setText(booked.isEmpty() ? "Ingen bookinger" : booked.size() + " fundet");
+                setFeedbackLabel(booked.isEmpty() ? "Ingen bookinger" : booked.size() + " fundet");
             }
         } catch (RuntimeException e) {
             bookings.clear();
-            feedbackLabel.setText("Fejl: Kunne ikke skabe forbindelse til database");
+           setFeedbackLabel("Fejl: Kunne ikke skabe forbindelse til database");
         }
     }
     private void setBookingTableValues() {

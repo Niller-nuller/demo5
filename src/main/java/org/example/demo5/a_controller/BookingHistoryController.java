@@ -10,8 +10,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,8 +53,8 @@ public class BookingHistoryController {
     private BookingService bookingService;
 
     @FXML
-    public void initialize(){
-        bookingService = new BookingService();
+    public void initialize(BookingService bookingService){
+        this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
         setCompletedBookingTable();
         setCanceledBookingTable();
@@ -82,7 +80,7 @@ public class BookingHistoryController {
     }
 
     private void refreshTable(LocalDate bookingDate){
-        feedbackLabel.setText("");
+        setFeedbackLabel("");
         try {
             List<Booking> completed = new ArrayList<>(bookingService.handleGetCompletedBooking(bookingDate));
             List<Booking> canceled = new ArrayList<>(bookingService.handleGetCancelledBooking(bookingDate));
@@ -90,7 +88,7 @@ public class BookingHistoryController {
             canceledBookings.clear();
             completedBookings.addAll(completed);
             canceledBookings.addAll(canceled);
-        } catch (SQLException e1) {
+        } catch (RuntimeException e) {
             setFeedbackLabel("An error occurred while trying to refresh the booking history");
         }
     }
@@ -101,17 +99,17 @@ public class BookingHistoryController {
         if (canceledBookingTable.getSelectionModel().getSelectedItem() != null) {
             selected = canceledBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
-            feedbackLabel.setText("");
+            setFeedbackLabel("");
             bookingService.handleCancelBooking(selected);
             setFeedbackLabel("Booking er blevet færdig gjort");
         } else if (completedBookingTable.getSelectionModel().getSelectedItem() != null) {
             selected = completedBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
-            feedbackLabel.setText("");
+            setFeedbackLabel("");
             bookingService.handleChangeBookingStatusToCompleted(selected);
             setFeedbackLabel("Booking er blevet aflyst");
         }
-        }catch (SQLException e){
+        }catch (RuntimeException e){
             setFeedbackLabel("An error occurred while trying to refresh the booking history");
         }
         if (selected == null) {
@@ -124,7 +122,7 @@ public class BookingHistoryController {
     }
     private void checkTableObject(Booking booking){
         if(booking == null){
-            feedbackLabel.setText("Vælg Booking du gerne vil aflyse");
+            setFeedbackLabel("Vælg Booking du gerne vil aflyse");
             throw new IllegalArgumentException();
         }
     }

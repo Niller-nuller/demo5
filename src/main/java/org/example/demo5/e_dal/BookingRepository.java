@@ -15,7 +15,6 @@ public class BookingRepository {
     public List<Booking> getBookingListBasedOnStatus(BookingStatus status, LocalDate date) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String SQL = """
-                
                 SELECT b.BookingId, c.Name AS customerName, t.Name AS treatmentName,
                 t.DurationMinutes AS treatmentDuration, e.Name AS employeeName,
                 b.StartTime, b.Status
