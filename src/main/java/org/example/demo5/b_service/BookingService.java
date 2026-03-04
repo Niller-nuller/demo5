@@ -14,8 +14,8 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepo; //Temp replace with Dependency injection.
-    PersonRepository personRepo = new PersonRepository();
-    TreatmentRepository treatmentRepo = new TreatmentRepository();
+    private final PersonRepository personRepo;
+    private final TreatmentRepository treatmentRepo;
 
     public BookingService(BookingRepository bookingRepo,PersonRepository personRepo, TreatmentRepository treatmentRepo){
         this.bookingRepo = bookingRepo;

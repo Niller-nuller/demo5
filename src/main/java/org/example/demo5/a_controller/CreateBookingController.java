@@ -2,7 +2,9 @@ package org.example.demo5.a_controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Employee;
@@ -13,8 +15,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+
 public class CreateBookingController {
+
     private BookingService bookingService;
+    private SceneSwitcher sceneSwitcher;
+
     private final ObservableList<Employee> employees = FXCollections.observableArrayList();
     private final ObservableList<Treatment> treatments = FXCollections.observableArrayList();
 
@@ -30,15 +36,14 @@ public class CreateBookingController {
     @FXML private Button createBookingButton;
 
     @FXML
-    public void initialize(BookingService bookingService) {
+    public void initialize(BookingService bookingService, SceneSwitcher sceneSwitcher) {
+        this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePicker.setValue(LocalDate.now());
         loadEmployees();
         loadTreatments();
         setupDateListener();
     }
-
-
     @FXML
     private void onCheckAvailability() {
         Employee selectedEmployee = employeeComboBox.getValue();
@@ -71,7 +76,6 @@ public class CreateBookingController {
             setFeedbackLabel("Fejl: " + e.getMessage());
         }
     }
-
     @FXML
     private void onCreateBooking() {
         try {
@@ -99,8 +103,8 @@ public class CreateBookingController {
         }
     }
     @FXML
-    private void onBackToBookings() {
-        // Switch to booking view (implement navigation)
+    private void onBackToBookings(ActionEvent event) {
+        sceneSwitcher.switchToBookingView((Node) event.getSource());
     }
     private void setupDateListener() {
         bookingDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {

@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
@@ -17,6 +18,7 @@ import java.util.List;
 public class BookingController {
 
     private BookingService bookingService;
+    private SceneSwitcher sceneSwitcher;
 
     @FXML private TableView<Booking> bookingTable;
     @FXML private TableColumn<Booking, String> customerNameC;
@@ -31,7 +33,8 @@ public class BookingController {
     private final ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize(BookingService bookingService){
+    public void initialize(BookingService bookingService, SceneSwitcher sceneSwitcher){
+        this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
         setupDatePickerListener();
@@ -54,9 +57,13 @@ public class BookingController {
         }
     }
     @FXML
-    public void onClickSwitchToCreateNewBooking(ActionEvent event){}
+    public void onClickSwitchToCreateNewBooking(ActionEvent event){
+        sceneSwitcher.switchToCreateBookingView((Node) event.getSource());
+    }
     @FXML
-    public void onClickSwitchToBookingHistory(ActionEvent event){}
+    public void onClickSwitchToBookingHistory(ActionEvent event){
+        sceneSwitcher.switchToBookingHistoryView((Node) event.getSource());
+    }
     @FXML
     public void onClickRefresh(ActionEvent event){
         refreshTable(bookingDatePick.getValue());

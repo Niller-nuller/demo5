@@ -73,11 +73,11 @@ public class BookingRepository {
     }
 
     public void changeBookingToCompleted(Booking booking) throws SQLException {
-        String SQL = "UPDATE booking SET Status = 'Completed' WHERE id = ?";
+        String SQL = "UPDATE booking SET Status = 'Completed' WHERE BookingId = ?";
         try (Connection conn = DbConnect.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(SQL);
             ps.setInt(1, booking.getId());
-            ps.executeQuery();
+            ps.executeUpdate();
         }
     }
     public boolean isTimeSlotAvailable(Employee employee, LocalDateTime start, LocalDateTime end) throws SQLException {

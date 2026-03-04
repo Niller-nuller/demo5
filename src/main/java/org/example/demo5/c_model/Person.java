@@ -2,9 +2,9 @@ package org.example.demo5.c_model;
 
 public class Person {
     private int id;
-    private String name;
-    private String email;
-    private String phoneNumber;
+    private final String name;
+    private final String email;
+    private final String phoneNumber;
 
     public Person(int id, String name, String email, String phoneNumber){
         this.id = id;
