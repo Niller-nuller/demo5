@@ -27,7 +27,7 @@ public class BookingService {
             return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Booked, date);
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public List<Booking> handleGetCompletedBooking(LocalDate date){
@@ -35,7 +35,7 @@ public class BookingService {
             return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Completed, date);
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public List<Booking> handleGetCancelledBooking(LocalDate date){
@@ -43,7 +43,7 @@ public class BookingService {
             return bookingRepo.getBookingListBasedOnStatus(BookingStatus.Cancelled, date);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database..");
         }
     }
     public void handleCancelBooking(Booking booking){
@@ -51,7 +51,7 @@ public class BookingService {
             bookingRepo.chancelBooking(booking);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public void handleChangeBookingStatusToCompleted(Booking booking){
@@ -59,7 +59,7 @@ public class BookingService {
             bookingRepo.changeBookingToCompleted(booking);
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public void handleCreateABooking(String customerName,String customerPhoneNumber,String customerEmail, Employee employee, Treatment treatment, LocalDateTime dateTime){
@@ -69,7 +69,7 @@ public class BookingService {
             bookingRepo.createABooking(customer, employee, treatment, dateTime);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public List<Employee> handleGetAllEmployees(){
@@ -77,7 +77,7 @@ public class BookingService {
             return personRepo.getAllEmployees();
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public List<Treatment> handleGetAllTreatments(){
@@ -85,7 +85,7 @@ public class BookingService {
             return treatmentRepo.getTreatments();
         }catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
     public List<LocalTime> handleGetAvailableTimes(Employee employee,LocalDate date, Treatment treatment){
@@ -93,7 +93,7 @@ public class BookingService {
             return bookingRepo.getAvailableTimes(employee, date, treatment);
         }catch (SQLException e){
             System.out.println("SQLException: " + e.getMessage());//PRETEND IT WRITES TO A LOG!!
-            throw new RuntimeException("Could connect to database.");
+            throw new RuntimeException("Could not connect to database.");
         }
     }
 }

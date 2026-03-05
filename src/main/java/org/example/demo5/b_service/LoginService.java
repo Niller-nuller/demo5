@@ -18,10 +18,10 @@ public class LoginService {
     }
     private void validateOperator(String username, String password){
         if(username.isBlank()){
-            throw new UserNameException("The username is empty");
+            throw new UserNameException("The username field is empty");
         }
         if(password.isBlank()){
-            throw new PasswordException("No password has been typed in");
+            throw new PasswordException("No password field is empty");
         }
     }
 }
