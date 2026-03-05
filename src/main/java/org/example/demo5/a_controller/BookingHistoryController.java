@@ -93,31 +93,31 @@ public class BookingHistoryController {
             completedBookings.addAll(completed);
             canceledBookings.addAll(canceled);
         } catch (RuntimeException e) {
-            setFeedbackLabel("An error occurred while trying to refresh the booking history");
+            setFeedbackLabel("Kunne ikke etablere forbindelse til database");
         }
     }
     @FXML
-    private void onClickChangeStatus(ActionEvent event){
-        Booking selected = null;
-        try{
-        if (canceledBookingTable.getSelectionModel().getSelectedItem() != null) {
-            selected = canceledBookingTable.getSelectionModel().getSelectedItem();
-            checkTableObject(selected);
-            setFeedbackLabel("");
-            bookingService.handleCancelBooking(selected);
-            setFeedbackLabel("Booking er blevet færdig gjort");
-        } else if (completedBookingTable.getSelectionModel().getSelectedItem() != null) {
-            selected = completedBookingTable.getSelectionModel().getSelectedItem();
+    public void onClickChangeStatusToCompleted(ActionEvent event){
+        try {
+            Booking selected = completedBookingTable.getSelectionModel().getSelectedItem();
             checkTableObject(selected);
             setFeedbackLabel("");
             bookingService.handleChangeBookingStatusToCompleted(selected);
-            setFeedbackLabel("Booking er blevet aflyst");
+            setFeedbackLabel("Booking er blevet færdig gjort");
+        }catch (RuntimeException e) {
+            setFeedbackLabel("Kunne ikke etablere forbindelse til database");
         }
+    }
+    @FXML
+    private void onClickChangeStatusToCancelled(ActionEvent event){
+        try {
+            Booking selected = canceledBookingTable.getSelectionModel().getSelectedItem();
+                checkTableObject(selected);
+                setFeedbackLabel("");
+                bookingService.handleCancelBooking(selected);
+                setFeedbackLabel("Booking er blevet aflyst");
         }catch (RuntimeException e){
-            setFeedbackLabel("An error occurred while trying to refresh the booking history");
-        }
-        if (selected == null) {
-            setFeedbackLabel("Vælg en booking du gerne vil ændre");
+            setFeedbackLabel("Kunne ikke etablere forbindelse til database");
         }
     }
     @FXML

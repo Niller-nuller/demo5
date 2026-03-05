@@ -33,8 +33,8 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="735.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClickChangeStatus" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Aflys" />
-      <Button layoutX="735.0" layoutY="436.0" mnemonicParsing="false" onAction="#onClickChangeStatus" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Færdig Gjort" />
+      <Button layoutX="735.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClickChangeStatusToCancelled" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Aflys" />
+      <Button layoutX="735.0" layoutY="436.0" mnemonicParsing="false" onAction="#onClickChangeStatusToCompleted" prefHeight="60.0" prefWidth="160.0" text="Flyt Til Færdig Gjort" />
       <DatePicker fx:id="bookingDatePick" layoutX="728.0" layoutY="73.0" />
       <Button layoutX="665.0" layoutY="72.0" mnemonicParsing="false" onAction="#onClickRefresh" prefHeight="27.0" prefWidth="37.0" text="🗘" />
       <Label fx:id="feedbackLabel" layoutX="249.0" layoutY="383.0" prefHeight="35.0" prefWidth="229.0">

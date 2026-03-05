@@ -53,13 +53,13 @@ public class BookingController {
             setFeedbackLabel("Booking er blevet aflyst");
             refreshTable(bookingDatePick.getValue());
         } catch (RuntimeException e){
-            setFeedbackLabel("An error has occurred when trying to connect to the server");
+            setFeedbackLabel("Kunne ikke etablere forbindelse til database");
         }
     }
     @FXML
     public void onClickSwitchToCreateNewBooking(ActionEvent event){
         sceneSwitcher.switchToCreateBookingView((Node) event.getSource());
-        System.out.println("Switch button clicked");
+
     }
     @FXML
     public void onClickSwitchToBookingHistory(ActionEvent event){
@@ -81,7 +81,7 @@ public class BookingController {
             }
         } catch (RuntimeException e) {
             bookings.clear();
-           setFeedbackLabel("Fejl: Kunne ikke skabe forbindelse til database");
+           setFeedbackLabel("Kunne ikke etablere forbindelse til database");
         }
     }
     private void setBookingTableValues() {
@@ -116,7 +116,7 @@ public class BookingController {
         }
     }
     private void setTodayLabel(){
-        TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm")));
+        TodayLabel.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm dd:MM:yy")));
     }
     public void setFeedbackLabel(String text){
         feedbackLabel.setText(text);
