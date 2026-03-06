@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import org.example.demo5.I_Interface.IBookingService;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Employee;
 import org.example.demo5.c_model.Treatment;
@@ -18,12 +19,6 @@ import java.util.List;
 
 public class CreateBookingController {
 
-    private BookingService bookingService;
-    private SceneSwitcher sceneSwitcher;
-
-    private final ObservableList<Employee> employees = FXCollections.observableArrayList();
-    private final ObservableList<Treatment> treatments = FXCollections.observableArrayList();
-
     @FXML private TextField customerNameField;
     @FXML private TextField customerPhoneField;
     @FXML private TextField customerEmailField;
@@ -34,10 +29,14 @@ public class CreateBookingController {
     @FXML private ListView<String> availabilityList;
     @FXML private Label feedbackLabel;
     @FXML private Button createBookingButton;
-    @FXML private Button backButton;
 
+    private final ObservableList<Employee> employees = FXCollections.observableArrayList();
+    private final ObservableList<Treatment> treatments = FXCollections.observableArrayList();
 
-    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher) {
+    private IBookingService bookingService;
+    private SceneSwitcher sceneSwitcher;
+
+    public void setup(IBookingService bookingService, SceneSwitcher sceneSwitcher) {
         this.bookingService = bookingService;
         this.sceneSwitcher = sceneSwitcher;
         bookingDatePicker.setValue(LocalDate.now());
@@ -94,7 +93,7 @@ public class CreateBookingController {
                 return;
             }
             LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-            bookingService.handleCreateABooking(customerName,customerPhone,customerEmail,employee,treatment,startDateTime);
+            bookingService.handleCreateBooking(customerName,customerPhone,customerEmail,employee,treatment,startDateTime);
 
             setFeedbackLabel("Booking oprettet for " + customerName + " kl. " + startTime.format(DateTimeFormatter.ofPattern("HH:mm")));
             clearForm();

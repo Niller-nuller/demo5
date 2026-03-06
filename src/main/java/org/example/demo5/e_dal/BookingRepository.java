@@ -1,5 +1,6 @@
 package org.example.demo5.e_dal;
 
+import org.example.demo5.I_Interface.IBookingRepository;
 import org.example.demo5.c_model.*;
 import org.example.demo5.d_dbconfig.DbConnect;
 
@@ -10,7 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingRepository {
+public class BookingRepository implements IBookingRepository {
 
     public List<Booking> getBookingListBasedOnStatus(BookingStatus status, LocalDate date) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
@@ -61,7 +62,8 @@ public class BookingRepository {
             }
         }
     }
-        public void chancelBooking(Booking booking) throws SQLException {
+    @Override
+    public void cancelBooking(Booking booking) throws SQLException {
         String SQL = "UPDATE Booking SET Status = 'Cancelled' WHERE BookingId = ?";
         try (Connection conn = DbConnect.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(SQL);

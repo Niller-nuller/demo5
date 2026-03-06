@@ -9,6 +9,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.example.demo5.I_Interface.IBookingService;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
 import java.time.LocalDate;
@@ -19,44 +20,31 @@ import java.util.List;
 
 public class BookingHistoryController {
 
-    @FXML
-    private TableView<Booking> completedBookingTable;
-    @FXML
-    private TableColumn<Booking, String> completedCustomerNameC;
-    @FXML
-    private TableColumn<Booking, String> completedTreatmentNameC;
-    @FXML
-    private TableColumn<Booking, String> completedTreatmentDurationC;
-    @FXML
-    private TableColumn<Booking, String> completedEmployeeNameC;
-    @FXML
-    private TableColumn<Booking, String> completedDueDateC;
-    @FXML
-    private TableView<Booking> canceledBookingTable;
-    @FXML
-    private TableColumn<Booking, String> canceledCustomerNameC;
-    @FXML
-    private TableColumn<Booking, String> canceledTreatmentNameC;
-    @FXML
-    private TableColumn<Booking, String> canceledTreatmentDurationC;
-    @FXML
-    private TableColumn<Booking, String> canceledEmployeeNameC;
-    @FXML
-    private TableColumn<Booking, String> canceledDueDateC;
-    @FXML
-    private Label TodayLabel;
-    @FXML
-    private Label feedbackLabel;
-    @FXML
-    private DatePicker bookingDatePick;
+    @FXML private TableView<Booking> completedBookingTable;
+    @FXML private TableColumn<Booking, String> completedCustomerNameC;
+    @FXML private TableColumn<Booking, String> completedTreatmentNameC;
+    @FXML private TableColumn<Booking, String> completedTreatmentDurationC;
+    @FXML private TableColumn<Booking, String> completedEmployeeNameC;
+    @FXML private TableColumn<Booking, String> completedDueDateC;
+    @FXML private TableView<Booking> canceledBookingTable;
+    @FXML private TableColumn<Booking, String> canceledCustomerNameC;
+    @FXML private TableColumn<Booking, String> canceledTreatmentNameC;
+    @FXML private TableColumn<Booking, String> canceledTreatmentDurationC;
+    @FXML private TableColumn<Booking, String> canceledEmployeeNameC;
+    @FXML private TableColumn<Booking, String> canceledDueDateC;
+    @FXML private Label TodayLabel;
+    @FXML private Label feedbackLabel;
+    @FXML private DatePicker bookingDatePick;
+
     private final ObservableList<Booking> canceledBookings = FXCollections.observableArrayList();
     private final ObservableList<Booking> completedBookings = FXCollections.observableArrayList();
 
+    private IBookingService bookingService;
     private SceneSwitcher sceneSwitcher;
-    private BookingService bookingService;
 
 
-    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher){
+
+    public void setup(IBookingService bookingService, SceneSwitcher sceneSwitcher){
         this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
@@ -68,6 +56,7 @@ public class BookingHistoryController {
         refreshTable(LocalDate.now());
         setTodayLabel();
     }
+
     private void setCompletedBookingTable( )  {
         completedCustomerNameC.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getCustomerName()));
         completedTreatmentNameC.setCellValueFactory(cell ->new javafx.beans.property.SimpleStringProperty(cell.getValue().getTreatmentName()));
@@ -86,8 +75,8 @@ public class BookingHistoryController {
     private void refreshTable(LocalDate bookingDate){
         setFeedbackLabel("");
         try {
-            List<Booking> completed = new ArrayList<>(bookingService.handleGetCompletedBooking(bookingDate));
-            List<Booking> canceled = new ArrayList<>(bookingService.handleGetCancelledBooking(bookingDate));
+            List<Booking> completed = new ArrayList<>(bookingService.handleGetCompletedBookings(bookingDate));
+            List<Booking> canceled = new ArrayList<>(bookingService.handleGetCancelledBookings(bookingDate));
             completedBookings.clear();
             canceledBookings.clear();
             completedBookings.addAll(completed);

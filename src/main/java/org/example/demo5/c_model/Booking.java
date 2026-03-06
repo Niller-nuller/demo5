@@ -43,7 +43,7 @@ public class Booking {
         return startTime;
     }
     public String getToStringStartTime(){
-        return startTime.format(DateTimeFormatter.ofPattern("dd/mm/yy hh/mm"));
+        return startTime.format(DateTimeFormatter.ofPattern("dd/MM/yy hh/mm"));
     }
     public BookingStatus getStatus(){
         return status;

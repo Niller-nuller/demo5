@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import org.example.demo5.I_Interface.IBookingService;
 import org.example.demo5.b_service.BookingService;
 import org.example.demo5.c_model.Booking;
 import java.time.LocalDate;
@@ -16,9 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BookingController {
-
-    private BookingService bookingService;
-    private SceneSwitcher sceneSwitcher;
 
     @FXML private TableView<Booking> bookingTable;
     @FXML private TableColumn<Booking, String> customerNameC;
@@ -32,8 +30,10 @@ public class BookingController {
 
     private final ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
+    private IBookingService bookingService;
+    private SceneSwitcher sceneSwitcher;
 
-    public void setup(BookingService bookingService, SceneSwitcher sceneSwitcher){
+    public void setup(IBookingService bookingService, SceneSwitcher sceneSwitcher){
         this.sceneSwitcher = sceneSwitcher;
         this.bookingService = bookingService;
         bookingDatePick.setValue(LocalDate.now());
@@ -122,5 +122,8 @@ public class BookingController {
         feedbackLabel.setText(text);
     }
 
+    private String getDateString(LocalDate date){
+        return date.format(DateTimeFormatter.ofPattern("hh:mm dd/MM/yyyy"));
+    }
 
 }

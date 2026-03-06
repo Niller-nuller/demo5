@@ -4,15 +4,16 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.demo5.HelloApplication;
+import org.example.demo5.I_Interface.IBookingService;
 import org.example.demo5.b_service.BookingService;
 
 import java.io.IOException;
 
 public class SceneSwitcher {
 
-    private final BookingService bookingService;
+    private final IBookingService bookingService;
 
-    public SceneSwitcher(BookingService bookingService) {
+    public SceneSwitcher(IBookingService bookingService) {
         this.bookingService = bookingService;
     }
 

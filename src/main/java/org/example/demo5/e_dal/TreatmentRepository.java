@@ -1,5 +1,6 @@
 package org.example.demo5.e_dal;
 
+import org.example.demo5.I_Interface.ITreatmentRepository;
 import org.example.demo5.c_model.Treatment;
 import org.example.demo5.d_dbconfig.DbConnect;
 
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreatmentRepository {
+public class TreatmentRepository implements ITreatmentRepository {
 
     public List<Treatment> getTreatments() throws SQLException {
         List<Treatment> treatments = new ArrayList<>();

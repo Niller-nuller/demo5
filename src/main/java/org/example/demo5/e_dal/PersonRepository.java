@@ -1,5 +1,6 @@
 package org.example.demo5.e_dal;
 
+import org.example.demo5.I_Interface.IPersonRepository;
 import org.example.demo5.c_model.Customer;
 import org.example.demo5.c_model.Employee;
 import org.example.demo5.d_dbconfig.DbConnect;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonRepository {
+public class PersonRepository implements IPersonRepository {
 
     public List<Employee> getAllEmployees() throws SQLException {
         List<Employee> employees = new ArrayList<>();
@@ -42,10 +43,10 @@ public class PersonRepository {
                 if (rs.next()){
                     return createCustomerFromRS(rs);
                 }
-            } return createCustomerIfNotInSQL(customer);
+            } return getOrCreateCustomer(customer);
         }
     }
-    public Customer createCustomerIfNotInSQL(Customer customer) throws SQLException {
+    public Customer getOrCreateCustomer(Customer customer) throws SQLException {
         String SQL = "INSERT INTO Customer (Name, Email, PhoneNumber) VALUES (?, ?, ?)";
         try(Connection conn = DbConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL, PreparedStatement.RETURN_GENERATED_KEYS)){
             ps.setString(1, customer.getName());
